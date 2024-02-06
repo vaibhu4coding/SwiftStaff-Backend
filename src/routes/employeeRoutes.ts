@@ -1,5 +1,5 @@
 import express from 'express'
-import { getEmployeeById, createEmployee } from '../controllers/employeeController'
+import { createEmployee } from '../controllers/employeeController'
+import { auth } from '../middlewares/auth'
 export const employeeRoute = express.Router()
-employeeRoute.post('/', createEmployee)
-employeeRoute.get('/:employeeId',getEmployeeById)
+employeeRoute.post('/', auth,createEmployee)

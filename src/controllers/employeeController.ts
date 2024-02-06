@@ -8,16 +8,16 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
     try {
         const newEmployee: Employee = req.body;
         await employeeModel.createEmployee(newEmployee);
-        res.status(201).json({message:'Employee created successfully!'})
+        res.status(200).json({message:'Employee created successfully!'})
     } catch (error) {
         console.error(error)
         res.status(500).json({message:'Server error'})
     }
 }
-export const getEmployeeById = async (req: Request, res: Response): Promise<void> => {
+export const getEmployeeByEmail = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { employeeId } = req.params;
-        const employee = await employeeModel.getEmployeeById(employeeId)
+        const { email } = req.params;
+        const employee = await employeeModel.getEmployeeByEmail(email)
         if (!employee) res.status(404).json({ message: 'employee not found' })
         else res.json(200).json(employee)
     } catch (error) {
@@ -25,3 +25,4 @@ export const getEmployeeById = async (req: Request, res: Response): Promise<void
         res.status(500).json({message:'Server error'})
     }
 } 
+
