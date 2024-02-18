@@ -1,6 +1,6 @@
-import express from "express";
+import express from 'express'
 import { createProject, getAllProjects } from '../controllers/projectController'
-import { auth } from "../middlewares/auth";
-export const projectRoutes = express.Router()
-projectRoutes.get('/', auth,getAllProjects)
-projectRoutes.post('/',auth,createProject)
+import { auth } from '../middlewares/auth'
+export const projectRoute = express.Router()
+projectRoute.post('/', auth, createProject)
+projectRoute.get('/',auth, getAllProjects)

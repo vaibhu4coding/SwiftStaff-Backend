@@ -1,56 +1,64 @@
-import { DynamoDB } from 'aws-sdk'
-import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-const dynamoDB = new DynamoDB.DocumentClient()
+import { DynamoDB } from 'aws-sdk';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+
+const dynamoDB = new DynamoDB.DocumentClient();
+
 export interface Project {
-    projectId: string,
-    name: string,
-    description: string,
-    startDate: string,
-    endDate: string,
-    status: string,
-    department: string,
-    employees: string[]
+    projectId: string;
+    name: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    status: string;
+    department: string;
+    // employees: string[]; // Assuming employee IDs are stored as strings
 }
-export class ProjectModel{
+
+export class ProjectModel {
     private tableName: string;
+
     constructor(tableName: string) {
-        this.tableName = tableName
+        this.tableName = tableName;
     }
 
     async createProject(project: Project): Promise<void> {
         const params: DocumentClient.PutItemInput = {
             TableName: this.tableName,
             Item: project
-        }
-        await dynamoDB.put(params).promise()
+        };
+
+        await dynamoDB.put(params).promise();
     }
 
-    async getAllProjects(filters:any):Promise<Project[]> {
+    async getAllProjects(department?: string, status?: string): Promise<Project[]> {
         const params: DocumentClient.ScanInput = {
-            TableName:this.tableName
+            TableName: this.tableName
+        };
+    
+        if (department || status) {
+            const filterExpression: string[] = [];
+            const expressionAttributeValues: DocumentClient.ExpressionAttributeValueMap = {};
+    
+            if (department) {
+                filterExpression.push('#department = :department');
+                expressionAttributeValues[':department'] = department;
+            }
+    
+            if (status) {
+                filterExpression.push('#status = :status');
+                expressionAttributeValues[':status'] = status;
+            }
+    
+            params.FilterExpression = filterExpression.join(' AND ');
+            params.ExpressionAttributeNames = {
+                '#department': 'department',
+                '#status': 'status'
+            };
+            params.ExpressionAttributeValues = expressionAttributeValues;
         }
-        if (filters) {
-            const filterExpression = []
-            const expressionAttributeValues:any = {}
-            if (filters.department) {
-                filterExpression.push('department=:department')
-                expressionAttributeValues[':department'] = filters.department
-            }
-            if (filters.startDate && filters.endDate) {
-                filterExpression.push('startDate BETWEEN :startDate AND :endDate')
-                expressionAttributeValues[':startDate'] = filters.startDate
-                expressionAttributeValues[':endDate'] = filters.endDate
-            }
-            if (filters.status) {
-                filterExpression.push('#status = :status')
-                expressionAttributeValues[':status'] = filters.status
-            }
-            params.FilterExpression = filterExpression.join(' AND ')
-            params.ExpressionAttributeValues = expressionAttributeValues
-            params.ExpressionAttributeNames = { '#status': 'status' }
-            
-        }
-        const result = await dynamoDB.scan(params).promise()
-        return result.Items as Project[]
+    
+        const result = await dynamoDB.scan(params).promise();
+        return result.Items as Project[];
     }
+    
 }

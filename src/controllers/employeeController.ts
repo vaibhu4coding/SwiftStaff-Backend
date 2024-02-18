@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Employee, EmployeeModel } from '../models/employeeModel';
 import { randomUUID } from 'crypto';
 
-const tableName = process.env.DYNAMODB_TABLE_NAME || '';
+const tableName = process.env.DYNAMODB_TABLE_NAME_EMPLOYEE || '';
 const employeeModel = new EmployeeModel(tableName);
 
 export const createEmployee = async (req: Request, res: Response): Promise<void> => {

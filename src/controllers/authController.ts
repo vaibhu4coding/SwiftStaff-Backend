@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import { EmployeeModel } from "../models/employeeModel";
-const tableName = process.env.DYNAMODB_TABLE_NAME || '';
+const tableName = process.env.DYNAMODB_TABLE_NAME_EMPLOYEE || '';
 const employeeModel = new EmployeeModel(tableName);
 const secret = process.env.JWT_SECRET || ''
 export const login = async (req: Request, res: Response) => {

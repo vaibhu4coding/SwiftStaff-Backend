@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllEmployees = exports.getEmployeeByEmail = exports.createEmployee = void 0;
 const employeeModel_1 = require("../models/employeeModel");
 const crypto_1 = require("crypto");
-const tableName = process.env.DYNAMODB_TABLE_NAME || '';
+const tableName = process.env.DYNAMODB_TABLE_NAME_EMPLOYEE || '';
 const employeeModel = new employeeModel_1.EmployeeModel(tableName);
 const createEmployee = async (req, res) => {
     try {

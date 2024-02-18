@@ -7,7 +7,7 @@ exports.login = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const employeeModel_1 = require("../models/employeeModel");
-const tableName = process.env.DYNAMODB_TABLE_NAME || '';
+const tableName = process.env.DYNAMODB_TABLE_NAME_EMPLOYEE || '';
 const employeeModel = new employeeModel_1.EmployeeModel(tableName);
 const secret = process.env.JWT_SECRET || '';
 const login = async (req, res) => {
