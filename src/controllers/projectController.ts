@@ -13,3 +13,13 @@ export const createProject = async (req: Request, res: Response) => {
         res.status(500).json({message: 'Internal server error'})
     }
 }
+export const getAllProjects = async (req: Request, res: Response) => {
+    try {
+        const filters = req.query
+        const projects = await projectModel.getAllProjects(filters)
+        res.status(200).json(projects)
+    } catch (error) {
+        console.error("Error fetching projects:", error)
+        res.status(500).json({message:"Internal server error"})
+    }
+}
